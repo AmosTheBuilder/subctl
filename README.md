@@ -13,10 +13,16 @@ Graduate-level orchestration for distributed AI systems.
 
 ## Installation
 
-### From GitHub
+### From GitHub Release (Recommended)
 
 ```bash
-git clone https://github.com/yourusername/subctl.git
+pip install https://github.com/AmosTheBuilder/subctl/archive/v0.1.0.tar.gz
+```
+
+### From Source
+
+```bash
+git clone https://github.com/AmosTheBuilder/subctl.git
 cd subctl
 pip install -e .
 ```

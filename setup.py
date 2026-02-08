@@ -11,7 +11,7 @@ setup(
     description="Sub-Agent Management CLI for distributed AI systems",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/subctl",
+    url="https://github.com/AmosTheBuilder/subctl",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
