@@ -11,6 +11,8 @@ from rich.table import Table
 from .orchestrator import SubCtlOrchestrator
 from .models import AgentInfo
 
+import datetime
+
 console = Console()
 
 
@@ -67,6 +69,7 @@ def main():
     list_parser = agents_subparsers.add_parser('list', help='List all agents')
     list_parser.add_argument('--watch', action='store_true', help='Real-time monitoring')
     list_parser.add_argument('--refresh', type=int, default=5, help='Refresh interval (seconds)')
+    list_parser.add_argument('--stale', action='store_true', help='Include stale/historical data')
 
     inspect_parser = agents_subparsers.add_parser('inspect', help='Inspect specific agent')
     inspect_parser.add_argument('agent_label', help='Agent label to inspect')
@@ -90,14 +93,32 @@ def main():
 
                 try:
                     while True:
-                        agents = orchestrator.get_all_agents()
-                        table = generate_agents_table(agents)
-                        console.print(table)
+                        agents = orchestrator.get_active_agents()
+                        if agents:
+                            table = generate_agents_table(agents)
+                            console.print(table)
+                        else:
+                            console.print("[yellow]No active agents found[/yellow]")
+                            console.print("[dim]Use --stale to see historical data[/dim]")
                         time.sleep(args.refresh)
                 except KeyboardInterrupt:
                     console.print("\n[dim]Monitoring stopped[/dim]")
             else:
-                console.print(generate_agents_table(orchestrator.get_all_agents()))
+                if args.stale:
+                    # Show all data including stale
+                    agents = orchestrator.get_all_agents()
+                    if agents:
+                        console.print(generate_agents_table(agents))
+                    else:
+                        console.print("[yellow]No agent data found in Redis[/yellow]")
+                else:
+                    # Show only active agents
+                    agents = orchestrator.get_active_agents()
+                    if agents:
+                        console.print(generate_agents_table(agents))
+                    else:
+                        console.print("[yellow]No active agents found[/yellow]")
+                        console.print("[dim]Use --stale to see historical data[/dim]")
 
         elif args.agents_command == 'inspect':
             agent_info = orchestrator.get_agent_info(args.agent_label)

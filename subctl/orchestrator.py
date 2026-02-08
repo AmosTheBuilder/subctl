@@ -51,6 +51,20 @@ class SubCtlOrchestrator:
 
         # Fallback: return empty dict
         return {}
+    
+    def get_active_agents(self, max_age_minutes: int = 10) -> Dict[str, AgentInfo]:
+        """Get only agents that have updated within the specified time window"""
+        all_agents = self.get_all_agents()
+        now = datetime.now()
+        active_agents = {}
+        
+        for label, agent in all_agents.items():
+            if isinstance(agent, AgentInfo):
+                age_minutes = (now - agent.last_update).total_seconds() / 60
+                if age_minutes <= max_age_minutes:
+                    active_agents[label] = agent
+                    
+        return active_agents
 
     def get_agent_info(self, agent_label: str) -> Optional[AgentInfo]:
         """Get specific agent info"""

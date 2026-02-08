@@ -39,13 +39,22 @@ pip install -r requirements.txt
 
 ## Usage
 
-### List All Agents
+### List Active Agents (Default)
+Shows only agents that have updated within the last 10 minutes:
 
 ```bash
 subctl agents list
 ```
 
+### List All Agents (Including Historical)
+Shows all agent data including stale/historical entries:
+
+```bash
+subctl agents list --stale
+```
+
 ### Real-Time Monitoring
+Monitors only active agents in real-time:
 
 ```bash
 subctl agents list --watch
