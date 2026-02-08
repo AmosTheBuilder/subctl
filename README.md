@@ -46,6 +46,11 @@ Shows only agents that have updated within the last 10 minutes:
 subctl agents list
 ```
 
+**Smart Filtering Features:**
+- **Completed agents**: Automatically removed after 5-second decay period
+- **Error states**: Stalled and error agents remain visible for investigation
+- **Compliance highlighting**: Low compliance agents highlighted in red/yellow
+
 ### List All Agents (Including Historical)
 Shows all agent data including stale/historical entries:
 

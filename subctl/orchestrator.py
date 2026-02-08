@@ -60,8 +60,14 @@ class SubCtlOrchestrator:
         
         for label, agent in all_agents.items():
             if isinstance(agent, AgentInfo):
-                age_minutes = (now - agent.last_update).total_seconds() / 60
-                if age_minutes <= max_age_minutes:
+                age_seconds = (now - agent.last_update).total_seconds()
+                age_minutes = age_seconds / 60
+                
+                # Special handling for completed agents - 5 second decay
+                if agent.status == 'completed':
+                    if age_seconds <= 5:  # Show for 5 seconds after completion
+                        active_agents[label] = agent
+                elif age_minutes <= max_age_minutes:  # Normal active agents
                     active_agents[label] = agent
                     
         return active_agents
